@@ -31,7 +31,24 @@ async def on_message(message):
         online_users = [
             member.name
             for member in message.guild.members
-            if member.status == discord.Status.online
+            if member.status == discord.Status.online and member != client.user
+        ]
+        team_1, team_2 = team_generator(online_users)
+        response = f"Team 1: {team_1} \nTeam 2: {team_2}"
+        await message.channel.send(response)
+
+    if message.content.startswith("/arrange_players"):
+        await message.channel.send(
+            "React with 👍 to the message if you are going to play tonight"
+        )
+
+        def check(reaction, user):
+            return user != client.user and str(reaction.emoji) == "👍"
+
+        _, user = await client.wait_for("reaction_add", check=check)
+
+        online_users = [
+            member.name for member in message.guild.members if str(member) == str(user)
         ]
         team_1, team_2 = team_generator(online_users)
         response = f"Team 1: {team_1} \nTeam 2: {team_2}"
