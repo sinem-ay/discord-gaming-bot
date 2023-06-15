@@ -17,12 +17,14 @@ jobs:
             USER_NAME: ${{ secrets.USER_NAME }}
         
         run: |
-          echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
+          echo "Test"
+          # Activate belong script before the workshop - when instance is running
+          # echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+          # ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
 
-            cd /home/ubuntu/discord-gaming-bot &&
-            git checkout master &&
-            git fetch --all &&
-            git reset --hard origin/master &&
-            git pull origin master
-          '
+          #   cd /home/ubuntu/discord-gaming-bot &&
+          #   git checkout master &&
+          #   git fetch --all &&
+          #   git reset --hard origin/master &&
+          #   git pull origin master
+          # '

@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 
-from util import team_generator
+from util import team_generator, get_free_games
 
 
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
@@ -52,6 +52,11 @@ async def on_message(message):
         ]
         team_1, team_2 = team_generator(online_users)
         response = f"Team 1: {team_1} \nTeam 2: {team_2}"
+        await message.channel.send(response)
+
+    if message.content.startswith("/free_games"):
+        games = get_free_games()
+        response = f"Currently available free games: \n{games}"
         await message.channel.send(response)
 
 
