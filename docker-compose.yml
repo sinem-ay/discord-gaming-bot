@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: discord-gaming-bot
+    command: python src/bot.py
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CHANNEL_ID=${CHANNEL_ID}
+      - EPIC_GAMES_API=${EPIC_GAMES_API}
+      - RSA_KEY_PATH=${RSA_KEY_PATH}
+      - INSTANCE_ID=${INSTANCE_ID}
