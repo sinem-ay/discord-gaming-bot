@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 
-from util import team_generator, get_free_games
+from util.util import team_generator, get_free_games
 
 
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
@@ -14,16 +14,13 @@ client = commands.Bot(command_prefix="/", intents=intents)
 
 
 @client.event
-async def on_ready():
+async def on_ready() -> None:
     channel = client.get_channel(CHANNEL_ID)
     await channel.send("Bot is activate")
 
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
-
     if message.content == "Hello":
         await message.channel.send(f"Hello {message.author}")
 
@@ -56,8 +53,10 @@ async def on_message(message):
 
     if message.content.startswith("/free_games"):
         games = get_free_games()
-        response = f"Currently available free games: \n{games}"
-        await message.channel.send(response)
+        for game in games:
+            embed = discord.Embed(title=game["title"], url=game["url"])
+            embed.set_image(url=game["image"])
+            await message.channel.send(embed=embed)
 
 
 client.run(DISCORD_TOKEN)
