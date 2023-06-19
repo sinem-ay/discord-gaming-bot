@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 
 from util.util import team_generator, get_free_games
+from dynamodb.manage_table import update_rating_discord
 
 
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
@@ -57,6 +58,26 @@ async def on_message(message):
             embed = discord.Embed(title=game["title"], url=game["url"])
             embed.set_image(url=game["image"])
             await message.channel.send(embed=embed)
+
+    if message.content.startswith("/rate"):
+        await message.channel.send(
+            "Provide game name and rating from 1 to 5 for record your rating e.g., Destiny 2 - 3"
+        )
+
+        def check(m):
+            return m.author == message.author
+
+        msg = await client.wait_for("message", timeout=60, check=check)
+        game_info = msg.content.split("-")
+        game_name, rating = game_info[0].strip(), game_info[1].strip()
+        update_rating = update_rating_discord(game_name, rating)
+
+        if update_rating:
+            await message.channel.send(
+                f"Rating for {game_name} has been updated to {rating}"
+            )
+        else:
+            await message.channel.send(f"Game {game_name} not found in the database.")
 
 
 client.run(DISCORD_TOKEN)

@@ -5,14 +5,8 @@ dynamodb = boto3.resource("dynamodb")
 
 table = dynamodb.create_table(
     TableName="games",
-    KeySchema=[
-        {"AttributeName": "game_name", "KeyType": "HASH"},
-        {"AttributeName": "rating_discord", "KeyType": "RANGE"},
-    ],
-    AttributeDefinitions=[
-        {"AttributeName": "game_name", "AttributeType": "S"},
-        {"AttributeName": "rating_discord", "AttributeType": "N"},
-    ],
+    KeySchema=[{"AttributeName": "game_name", "KeyType": "HASH"}],
+    AttributeDefinitions=[{"AttributeName": "game_name", "AttributeType": "S"}],
     ProvisionedThroughput={"ReadCapacityUnits": 5, "WriteCapacityUnits": 5},
 )
 
