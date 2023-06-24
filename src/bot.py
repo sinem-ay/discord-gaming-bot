@@ -53,11 +53,20 @@ async def on_message(message):
         await message.channel.send(response)
 
     if message.content.startswith("/free_games"):
-        games = get_free_games()
-        for game in games:
-            embed = discord.Embed(title=game["title"], url=game["url"])
-            embed.set_image(url=game["image"])
-            await message.channel.send(embed=embed)
+        free_games, upcoming_free_games = get_free_games()
+
+        async def send_embed_message(game_list, title_prefix):
+            for game in game_list:
+                embed = discord.Embed(
+                    title=f"{title_prefix} {game['title']}", url=game["url"]
+                )
+                embed.set_image(url=game["image"])
+                await message.channel.send(embed=embed)
+
+        await send_embed_message(free_games, "Free game for the week:\n")
+        await send_embed_message(
+            upcoming_free_games, "Upcoming free game for the next week:\n"
+        )
 
     if message.content.startswith("/rate"):
         await message.channel.send(

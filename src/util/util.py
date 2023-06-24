@@ -1,7 +1,8 @@
 import os
 import random
 import requests
-from typing import List
+from datetime import datetime
+from typing import List, Tuple
 
 
 EPIC_GAMES_API = os.environ["EPIC_GAMES_API"]
@@ -15,25 +16,45 @@ def team_generator(users: List[str]) -> List[str]:
     return team_1, team_2
 
 
-def get_free_games() -> List[dict]:
+def datetime_to_string(dt):
+    return dt.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+
+def add_games_list(game: dict, game_url: str, game_list: list) -> None:
+    game_list.append(
+        {
+            "title": game["title"],
+            "url": game_url,
+            "image": game["keyImages"][0]["url"],
+        }
+    )
+
+
+def get_free_games() -> Tuple[List[dict], List[dict]]:
     response = requests.get(EPIC_GAMES_API)
     data = response.json()
     games = data["data"]["Catalog"]["searchStore"]["elements"]
 
-    games_list = []
+    free_games, upcoming_free_games = [], []
     for game in games:
-        game_url = (
-            f"https://www.epicgames.com/store/en-US/product/{game['productSlug']}"
-        )
-        games_list.append(
-            {
-                "title": game["title"],
-                "url": game_url,
-                "image": game["keyImages"][0]["url"],
-            }
-        )
+        promotions = game["promotions"]
+        if promotions:
+            offers = (
+                promotions["upcomingPromotionalOffers"]
+                or promotions["promotionalOffers"]
+            )
+            offer = offers[0]["promotionalOffers"][0]
+            start_date, end_date = offer["startDate"], offer["endDate"]
+            game_url = (
+                f"https://www.epicgames.com/store/en-US/product/{game['productSlug']}"
+            )
+            current_date = datetime_to_string(datetime.now())
+            if start_date <= current_date and end_date > current_date:
+                add_games_list(game, game_url, free_games)
+            if start_date > current_date:
+                add_games_list(game, game_url, upcoming_free_games)
 
-    return games_list
+    return free_games, upcoming_free_games
 
 
 def get_game_details() -> List[dict]:
