@@ -10,7 +10,6 @@ DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
 CHANNEL_ID = int(os.environ["CHANNEL_ID"])
 
 intents = discord.Intents.all()
-intents.message_content = True
 client = commands.Bot(command_prefix="/", intents=intents)
 
 

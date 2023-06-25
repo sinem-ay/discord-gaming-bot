@@ -9,11 +9,28 @@ EPIC_GAMES_API = os.environ["EPIC_GAMES_API"]
 STEAMSPY_API = os.environ["STEAMSPY_API"]
 
 
-def team_generator(users: List[str]) -> List[str]:
-    teams = len(users) // 2
+def team_generator(users: List[str], teams: int) -> List[str]:
     random.shuffle(users)
-    team_1, team_2 = users[:teams], users[teams:]
-    return team_1, team_2
+    team_list = []
+    start_index = 0
+    users_per_team = len(users) // teams
+    remaining_users = len(users) % teams
+
+    for i in range(teams):
+        if remaining_users > 0:
+            num_users = users_per_team + 1
+            remaining_users -= 1
+        else:
+            num_users = users_per_team
+
+        end_index = start_index + num_users
+        team_users = users[start_index:end_index]
+
+        teams_dict = {"team_number": f"Team {i+1}", "users": team_users}
+        team_list.append(teams_dict)
+        start_index = end_index
+
+    return team_list
 
 
 def datetime_to_string(dt):

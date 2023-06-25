@@ -6,6 +6,9 @@ services:
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - CHANNEL_ID=${CHANNEL_ID}
+      - GUILD_ID=${GUILD_ID}
       - EPIC_GAMES_API=${EPIC_GAMES_API}
       - RSA_KEY_PATH=${RSA_KEY_PATH}
       - INSTANCE_ID=${INSTANCE_ID}
+      - STEAMSPY_API=${STEAMSPY_API}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
