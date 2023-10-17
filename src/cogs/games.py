@@ -17,7 +17,7 @@ class Games(commands.Cog, name="games"):
     @app_commands.command(name="hello", description="Check if the bot is active")
     async def hello(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title=f"Hello {interaction.message.author}!",
+            title=f"Hello!",
             description=f"The bot latency is {round(self.bot.latency * 1000)}ms.",
             color=0x9C84EF,
         )

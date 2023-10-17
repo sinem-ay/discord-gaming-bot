@@ -1,3 +1,4 @@
 .envrc
 .env
 src/ec2/logs
+.vscode/

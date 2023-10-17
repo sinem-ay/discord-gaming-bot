@@ -16,9 +16,8 @@ class ChatGPT(commands.Cog, name="chatgpt"):
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo", messages=[{"role": "system", "content": message}]
         )
-        await interaction.response.send_message(
-            completion["choices"][0]["message"]["content"]
-        )
+        await interaction.response.defer()
+        await interaction.followup.send(completion["choices"][0]["message"]["content"])
 
 
 async def setup(bot: commands.Bot):
